@@ -1,0 +1,30 @@
+{
+  "amortization": {
+    "1": {
+      "conventional_total": 2699454054400.0,
+      "direct_total": 16349788197760.0
+    },
+    "10": {
+      "conventional_total": 26994540544000.0,
+      "direct_total": 17564571616000.0
+    },
+    "100": {
+      "conventional_total": 269945405440000.0,
+      "direct_total": 29712405798400.0
+    },
+    "1000": {
+      "conventional_total": 2699454054400000.0,
+      "direct_total": 151190747622400.0
+    }
+  },
+  "application": {
+    "conventional_total_flops": 2699454054400.0,
+    "direct_total_flops": 134975935360.0
+  },
+  "meta_training": {
+    "predictor_train_flops": 18087936000.0,
+    "total_meta_flops": 16214812262400.0,
+    "trajectory_gen_flops": 16196724326400.0,
+    "trajectory_gen_wall_sec": 131.48437809944153
+  }
+}

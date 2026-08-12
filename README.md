@@ -7,7 +7,7 @@
 ![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PyTorch CPU](https://img.shields.io/badge/pytorch-2.x%20CPU-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![No GPU required](https://img.shields.io/badge/GPU-none_required-6B46C1?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-40%20passing-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-55%20passing-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge)
 
 **Research status: hypothesis under investigation — nothing here is claimed to work yet.**
@@ -66,7 +66,8 @@ in 20 minutes is *not* an improvement over 100 updates in 10 minutes.
 | 📊 **`src/evaluate.py`** | Validation loss/perplexity, gradient & parameter norms |
 | 💾 **`src/checkpoint.py`** | Trajectory snapshots (`W0…W100`) + resumable optimizer state |
 | 🔬 **`src/phase2/`** | Direct-Update research: baseline audit, oracle, structure analysis, method benchmark |
-| ✅ **`tests/`** | 40 tests covering model, data, training, checkpoints, and Phase-2 smoke tests |
+| 🧠 **`src/phase3/`** | Learned Direct Update Predictor: meta-training, structured parameterisation, ablations, compute accounting |
+| ✅ **`tests/`** | 55 tests covering model, data, training, checkpoints, Phase-2/3 research code |
 
 ### 📁 Project layout
 
@@ -76,10 +77,12 @@ direct-learning/
 ├── src/
 │   ├── model.py · tokenizer.py · dataset.py · train.py
 │   ├── evaluate.py · checkpoint.py · utils.py
-│   └── phase2/                # oracle · analysis · methods · plots · reports
-├── tests/                     # 40 pytest cases
+│   ├── phase2/                # oracle · analysis · methods · plots · reports
+│   └── phase3/                # trajectory · features · predictor · eval · plots · report
+├── tests/                     # 55 pytest cases
 ├── results/                   # config.json · metrics.json · training.log · trajectory/
-│   └── phase2/                # baseline_audit.md · phase2_summary.md · plots/ · *.json
+│   ├── phase2/                # baseline_audit.md · phase2_summary.md · plots/ · *.json
+│   └── phase3/                # configs · metrics · predictions · plots · ablations · phase3_report.md
 ├── data/                      # generated corpus (deterministic, tiny)
 └── README.md · requirements.txt · pytest.ini · LICENSE
 ```
@@ -97,7 +100,7 @@ python3 -m venv .venv
 # CPU-only PyTorch (recommended for this machine):
 .venv/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch
 
-# Run the tests (all 40 should pass)
+# Run the tests (all 55 should pass)
 .venv/bin/pytest
 
 # Run the Phase-1 baseline (100 AdamW steps, ~1 min)
@@ -105,6 +108,9 @@ python3 -m venv .venv
 
 # Run the Phase-2 Direct-Update research (audit + oracle + analysis + methods)
 .venv/bin/python -m src.phase2.run --phase1-config configs/baseline.yaml
+
+# Run the Phase-3 Learned Direct Update Predictor (meta-train + direct eval + ablations)
+.venv/bin/python -m src.phase3.run --phase1-config configs/baseline.yaml
 ```
 
 🖥️ **Hardware-conscious by design** — this runs happily on a shared CPU-only VPS:
@@ -179,11 +185,49 @@ Full details: [`results/phase2/baseline_audit.md`](results/phase2/baseline_audit
 
 ---
 
+## 🧠 What Phase 3 investigates
+
+Phase 3 answers the question Phase 2 left open: *can a small **learned** predictor
+produce a useful multi-step parameter transformation from information available early
+in training (steps 0–K), without running the remaining H−K optimizer steps?*
+
+1. **Meta-training** — replay the Phase-1 recipe from fresh seeds; record only
+   step-≤K information (per-step gradients, loss history, per-layer statistics).
+2. **Structured parameterisation** — the predictor emits per-layer coefficients for an
+   *observed-gradient basis* (mean / first / last gradient), not 1.6M raw parameters:
+   `ΔW_pred = Σ_l Σ_j α_lj · D_lj`, `W_pred = W_K + ΔW_pred`.
+3. **No-cheat enforcement** — the target `ΔW = W_H − W_K` is used *only* for
+   supervised meta-training; the direct method receives nothing beyond step K.
+4. **Grid** — K ∈ {5, 10}, H ∈ {25, 50, 100} on 6 train / 2 val / 5 held-out test
+   trajectories (seeds 30–33 + reference seed 7).
+5. **Ablations** — feature sets A–F (loss / grad / grad+loss / full / compressed /
+   rich) and parameterisation bases (mean / first-last / first-last-mean).
+6. **Full compute accounting** — meta-training, direct application, conventional
+   rollout, and amortized totals are all reported separately.
+
+### 📌 Headline findings
+
+- ❌ **Negative result.** The Direct Update Predictor reaches val loss ≈ 2.1–3.8 across
+  the K/H grid vs conventional **0.84–1.52** — it does not approach AdamW quality.
+- 🎯 **The limitation is the parameterisation family, not the learning.** Even the
+  *oracle* (coefficients chosen with the future answer) reaches only ≈ 2.0–3.3: per-layer
+  scaling of a few observed gradients cannot span the true multi-step update.
+- 🧭 More observation (K=10) helps a lot (val 2.1 vs 3.4 at K=5) but does not bridge the
+  gap; richer features and bases barely move quality.
+- 💸 **Compute is not the blocker.** Meta-training costs ~6 conventional runs; the direct
+  method amortizes to cheaper-than-conventional after ≈ 6 applications. The failure is
+  quality, and it is reported with the meta-training FLOPs **not** hidden.
+
+Full details: [`results/phase3/phase3_report.md`](results/phase3/phase3_report.md) ·
+plots in `results/phase3/plots/`, raw data in `results/phase3/metrics|predictions|ablations`.
+
+---
+
 ## 🧩 Project roadmap
 
 - [x] **Phase 1** — CPU baseline + full trajectory `W0…W100`
 - [x] **Phase 2** — audit, oracle, structure analysis, direct-method benchmark
-- [ ] **Phase 3** — small *learned* Direct-Update predictor, benchmarked against Phase-2 numbers
+- [x] **Phase 3** — meta-learned direct update predictor, parameterisation ablations, compute analysis, reproducible negative result
 - [ ] *Later* — learned optimizers, model editing, LoRA, GPU scaling (explicitly out of scope for now)
 
 ---

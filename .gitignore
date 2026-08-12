@@ -15,6 +15,7 @@ env/
 # --- generated / large experiment artifacts ---
 checkpoints/
 results/trajectory/
+results/phase3/checkpoints/
 
 # --- OS noise ---
 .DS_Store

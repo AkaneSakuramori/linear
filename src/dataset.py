@@ -105,9 +105,9 @@ def _starts_for(global_index: int, seed: int, count: int, max_start: int) -> Lis
 def make_window_batch(ids: torch.Tensor, context_length: int, global_index: int,
                       seed: int, count: int) -> Tuple[torch.Tensor, torch.Tensor]:
     """Sampled windows of `count` sequences: (x, targets) of shape (count, ctx)."""
-    max_start = int(ids.numel()) - context_length
-    if max_start < 1:
-        raise ValueError("corpus shorter than context_length")
+    max_start = int(ids.numel()) - context_length - 1
+    if max_start < 0:
+        raise ValueError("corpus shorter than context_length + 1")
     starts = torch.tensor(
         _starts_for(global_index, seed, count, max_start), dtype=torch.long)
     pos = starts[:, None] + torch.arange(context_length, dtype=torch.long)

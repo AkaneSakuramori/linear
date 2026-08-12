@@ -51,6 +51,15 @@ def test_window_batch_deterministic(tiny_corpora):
     assert torch.equal(a[0], b[0]) and torch.equal(a[1], b[1])
 
 
+def test_window_batch_no_boundary_overflow():
+    # regression: max_start must leave room for the +1 target shift so that
+    # ids[pos + 1] never indexes past the corpus (latent Phase-1/2 bug).
+    ids = torch.arange(17)  # 17 tokens, ctx 16 -> only valid start is 0
+    x, y = make_window_batch(ids, 16, 0, seed=1, count=2)
+    assert x.max() <= 15 and y.max() <= 16
+    assert torch.equal(x[:, 1:], y[:, :-1])
+
+
 def test_window_batch_resume_consistent(tiny_corpora):
     # mirror of the train loop: per-micro-step index only depends on step/seed
     ctx = 16
