@@ -1,0 +1,5 @@
+torch>=2.2          # CPU-only build: pip install torch --index-url https://download.pytorch.org/whl/cpu
+numpy>=1.26
+PyYAML>=6.0
+pytest>=7.0
+matplotlib>=3.7     # Phase-2 analysis plots only

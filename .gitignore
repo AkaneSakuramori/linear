@@ -1,0 +1,21 @@
+# --- Python / tooling ---
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+
+# --- virtualenv ---
+.venv/
+venv/
+env/
+
+# --- generated / large experiment artifacts ---
+checkpoints/
+results/trajectory/
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db

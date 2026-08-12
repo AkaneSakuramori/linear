@@ -1,0 +1,1083 @@
+{
+  "config": {
+    "phase1_config": "configs/baseline.yaml",
+    "out_dir": "results/phase2",
+    "reference_trajectory_dir": "results/trajectory",
+    "horizons": [
+      5,
+      10,
+      25,
+      50,
+      100
+    ],
+    "use_horizon_100": true,
+    "alpha_grid": "logspace(-4, 2, 25)",
+    "ranks": [
+      4,
+      16,
+      64,
+      128,
+      256
+    ],
+    "momentum_beta": 0.9,
+    "threads": 4,
+    "eval_batch": 32,
+    "eval_max_windows": 1024,
+    "methods": [
+      "BaselineAdamW",
+      "DirectOracle",
+      "DirectGradient",
+      "DirectAverageGradient",
+      "DirectMomentum",
+      "DirectLowRank"
+    ],
+    "seed": 7
+  },
+  "seed": 7,
+  "baseline": [
+    {
+      "name": "BaselineAdamW",
+      "kind": "baseline",
+      "horizon": 100,
+      "alpha": 0.0003,
+      "final_train_loss": 0.8372902551035243,
+      "final_val_loss": 0.8373222655972602,
+      "final_val_ppl": 2.3101726583090714,
+      "param_distance_rel": 0.0,
+      "compute": {
+        "fwd_count": 100,
+        "bwd_count": 100,
+        "optimizer_updates": 100,
+        "param_updates": 100,
+        "tuning_evals": 0,
+        "total_evals": 11,
+        "wall_time_sec": 26.0636,
+        "flops_est": 5074973622272.0,
+        "intrinsic_flops_est": 2699454054400.0,
+        "eval_flops_est": 2375519567872.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 204800,
+        "peak_ram_mib": 656.375
+      },
+      "trajectory": [
+        {
+          "step": 0,
+          "train_loss": 3.4597064016336425,
+          "val_loss": 3.4597064016336425,
+          "val_ppl": 31.807636473518055
+        },
+        {
+          "step": 1,
+          "train_loss": 3.455899953842163,
+          "val_loss": 3.0516342468701727,
+          "val_ppl": 21.149880320480893
+        },
+        {
+          "step": 2,
+          "train_loss": 3.0335803031921387,
+          "val_loss": 2.9670061797292204,
+          "val_ppl": 19.433651557566627
+        },
+        {
+          "step": 5,
+          "train_loss": 2.7704055309295654,
+          "val_loss": 2.6284427080852697,
+          "val_ppl": 13.852181206747874
+        },
+        {
+          "step": 10,
+          "train_loss": 2.1630733013153076,
+          "val_loss": 2.0851460103405155,
+          "val_ppl": 8.045766160994816
+        },
+        {
+          "step": 25,
+          "train_loss": 1.5104057788848877,
+          "val_loss": 1.5153671138384637,
+          "val_ppl": 4.551091588904418
+        },
+        {
+          "step": 50,
+          "train_loss": 1.2272639274597168,
+          "val_loss": 1.1708950697478941,
+          "val_ppl": 3.22487783770181
+        },
+        {
+          "step": 75,
+          "train_loss": 0.9772951602935791,
+          "val_loss": 0.9760742827786605,
+          "val_ppl": 2.6540168446428383
+        },
+        {
+          "step": 100,
+          "train_loss": 0.8488667607307434,
+          "val_loss": 0.8373222655972602,
+          "val_ppl": 2.3101726583090714
+        }
+      ],
+      "notes": "Full Phase-1 AdamW run (replayed once for instrumentation; N=100)"
+    }
+  ],
+  "direct": [
+    {
+      "name": "DirectGradient",
+      "kind": "practical",
+      "horizon": 5,
+      "alpha": 0.03162277660168379,
+      "final_train_loss": 3.1002859787678156,
+      "final_val_loss": 3.1009752956053678,
+      "final_val_ppl": 22.21961140657009,
+      "param_distance_rel": 0.12499247514950373,
+      "compute": {
+        "fwd_count": 1,
+        "bwd_count": 1,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.7767,
+        "flops_est": 5641858973696.0,
+        "intrinsic_flops_est": 26994540544.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.1009752956053678
+        }
+      ],
+      "notes": "Single scaled first-gradient update: W0 - alpha*gradL(W0); alpha tuned on val"
+    },
+    {
+      "name": "DirectAverageGradient",
+      "kind": "practical",
+      "horizon": 5,
+      "alpha": 0.31622776601683794,
+      "final_train_loss": 2.8375619227491966,
+      "final_val_loss": 2.832109530208821,
+      "final_val_ppl": 16.981245517227386,
+      "param_distance_rel": 0.1228588145410727,
+      "compute": {
+        "fwd_count": 5,
+        "bwd_count": 5,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.708,
+        "flops_est": 5749837135872.0,
+        "intrinsic_flops_est": 134972702720.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.832109530208821
+        }
+      ],
+      "notes": "Single update along mean of 5 roll-out gradients"
+    },
+    {
+      "name": "DirectMomentum",
+      "kind": "practical",
+      "horizon": 5,
+      "alpha": 0.5623413251903491,
+      "final_train_loss": 2.890386812330231,
+      "final_val_loss": 2.8703781903208556,
+      "final_val_ppl": 17.643689610861276,
+      "param_distance_rel": 0.1258096739133987,
+      "compute": {
+        "fwd_count": 5,
+        "bwd_count": 5,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.2138,
+        "flops_est": 5749837135872.0,
+        "intrinsic_flops_est": 134972702720.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.8703781903208556
+        }
+      ],
+      "notes": "Momentum-styled cumulative EMA direction over 5 roll-out steps"
+    },
+    {
+      "name": "DirectLowRank_r16",
+      "kind": "practical",
+      "horizon": 5,
+      "alpha": 0.31622776601683794,
+      "final_train_loss": 2.846826658474179,
+      "final_val_loss": 2.8414786086756822,
+      "final_val_ppl": 17.141091775743906,
+      "param_distance_rel": 0.12302237254150235,
+      "compute": {
+        "fwd_count": 5,
+        "bwd_count": 5,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.7345,
+        "flops_est": 5749837135872.0,
+        "intrinsic_flops_est": 134972702720.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.8414786086756822
+        }
+      ],
+      "notes": "Rank-16 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r64",
+      "kind": "practical",
+      "horizon": 5,
+      "alpha": 0.31622776601683794,
+      "final_train_loss": 2.8376059813762273,
+      "final_val_loss": 2.8321559508083576,
+      "final_val_ppl": 16.982033815121664,
+      "param_distance_rel": 0.12286175998255267,
+      "compute": {
+        "fwd_count": 5,
+        "bwd_count": 5,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.8823,
+        "flops_est": 350929027072.0,
+        "intrinsic_flops_est": 134972702720.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.8321559508083576
+        }
+      ],
+      "notes": "Rank-64 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r128",
+      "kind": "practical",
+      "horizon": 5,
+      "alpha": 0.31622776601683794,
+      "final_train_loss": 2.837566182369322,
+      "final_val_loss": 2.8321139530289017,
+      "final_val_ppl": 16.981320622387145,
+      "param_distance_rel": 0.12285888978957767,
+      "compute": {
+        "fwd_count": 5,
+        "bwd_count": 5,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.9203,
+        "flops_est": 350929027072.0,
+        "intrinsic_flops_est": 134972702720.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.8321139530289017
+        }
+      ],
+      "notes": "Rank-128 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectGradient",
+      "kind": "practical",
+      "horizon": 10,
+      "alpha": 0.03162277660168379,
+      "final_train_loss": 3.1002859787678156,
+      "final_val_loss": 3.1009752956053678,
+      "final_val_ppl": 22.21961140657009,
+      "param_distance_rel": 0.12499247514950373,
+      "compute": {
+        "fwd_count": 1,
+        "bwd_count": 1,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.8046,
+        "flops_est": 5641858973696.0,
+        "intrinsic_flops_est": 26994540544.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.1009752956053678
+        }
+      ],
+      "notes": "Single scaled first-gradient update: W0 - alpha*gradL(W0); alpha tuned on val"
+    },
+    {
+      "name": "DirectAverageGradient",
+      "kind": "practical",
+      "horizon": 10,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.4681335603158305,
+      "final_val_loss": 2.4646595796586994,
+      "final_val_ppl": 11.759478304905466,
+      "param_distance_rel": 0.11662251944378368,
+      "compute": {
+        "fwd_count": 10,
+        "bwd_count": 10,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.6882,
+        "flops_est": 5884809838592.0,
+        "intrinsic_flops_est": 269945405440.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.4646595796586994
+        }
+      ],
+      "notes": "Single update along mean of 10 roll-out gradients"
+    },
+    {
+      "name": "DirectMomentum",
+      "kind": "practical",
+      "horizon": 10,
+      "alpha": 0.1,
+      "final_train_loss": 2.7090257434394416,
+      "final_val_loss": 2.7125356053875587,
+      "final_val_ppl": 15.067432181523417,
+      "param_distance_rel": 0.12021341034996316,
+      "compute": {
+        "fwd_count": 10,
+        "bwd_count": 10,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.9926,
+        "flops_est": 5884809838592.0,
+        "intrinsic_flops_est": 269945405440.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.7125356053875587
+        }
+      ],
+      "notes": "Momentum-styled cumulative EMA direction over 10 roll-out steps"
+    },
+    {
+      "name": "DirectLowRank_r16",
+      "kind": "practical",
+      "horizon": 10,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.461250656233059,
+      "final_val_loss": 2.452375887628783,
+      "final_val_ppl": 11.615912061943181,
+      "param_distance_rel": 0.11808581262107484,
+      "compute": {
+        "fwd_count": 10,
+        "bwd_count": 10,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.0154,
+        "flops_est": 5884809838592.0,
+        "intrinsic_flops_est": 269945405440.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.452375887628783
+        }
+      ],
+      "notes": "Rank-16 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r64",
+      "kind": "practical",
+      "horizon": 10,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.467370140270924,
+      "final_val_loss": 2.4637827813445985,
+      "final_val_ppl": 11.749172133030342,
+      "param_distance_rel": 0.11669862793166025,
+      "compute": {
+        "fwd_count": 10,
+        "bwd_count": 10,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.8134,
+        "flops_est": 485901729792.0,
+        "intrinsic_flops_est": 269945405440.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.4637827813445985
+        }
+      ],
+      "notes": "Rank-64 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r128",
+      "kind": "practical",
+      "horizon": 10,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.4681615454005446,
+      "final_val_loss": 2.464686043403572,
+      "final_val_ppl": 11.759789508856953,
+      "param_distance_rel": 0.11662572288013781,
+      "compute": {
+        "fwd_count": 10,
+        "bwd_count": 10,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.8069,
+        "flops_est": 485901729792.0,
+        "intrinsic_flops_est": 269945405440.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.464686043403572
+        }
+      ],
+      "notes": "Rank-128 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectGradient",
+      "kind": "practical",
+      "horizon": 25,
+      "alpha": 0.03162277660168379,
+      "final_train_loss": 3.1002859787678156,
+      "final_val_loss": 3.1009752956053678,
+      "final_val_ppl": 22.21961140657009,
+      "param_distance_rel": 0.12499247514950373,
+      "compute": {
+        "fwd_count": 1,
+        "bwd_count": 1,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.1729,
+        "flops_est": 5641858973696.0,
+        "intrinsic_flops_est": 26994540544.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.1009752956053678
+        }
+      ],
+      "notes": "Single scaled first-gradient update: W0 - alpha*gradL(W0); alpha tuned on val"
+    },
+    {
+      "name": "DirectAverageGradient",
+      "kind": "practical",
+      "horizon": 25,
+      "alpha": 0.5623413251903491,
+      "final_train_loss": 2.906100725564431,
+      "final_val_loss": 2.9094773747378153,
+      "final_val_ppl": 18.347207346879244,
+      "param_distance_rel": 0.12176805521227904,
+      "compute": {
+        "fwd_count": 25,
+        "bwd_count": 25,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.5277,
+        "flops_est": 6289727946752.0,
+        "intrinsic_flops_est": 674863513600.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.9094773747378153
+        }
+      ],
+      "notes": "Single update along mean of 25 roll-out gradients"
+    },
+    {
+      "name": "DirectMomentum",
+      "kind": "practical",
+      "horizon": 25,
+      "alpha": 0.1,
+      "final_train_loss": 3.0825417736383875,
+      "final_val_loss": 3.08997425129086,
+      "final_val_ppl": 21.97651210166017,
+      "param_distance_rel": 0.12122150382116208,
+      "compute": {
+        "fwd_count": 25,
+        "bwd_count": 25,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.8869,
+        "flops_est": 6289727946752.0,
+        "intrinsic_flops_est": 674863513600.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.08997425129086
+        }
+      ],
+      "notes": "Momentum-styled cumulative EMA direction over 25 roll-out steps"
+    },
+    {
+      "name": "DirectLowRank_r16",
+      "kind": "practical",
+      "horizon": 25,
+      "alpha": 0.5623413251903491,
+      "final_train_loss": 2.9178900512184685,
+      "final_val_loss": 2.921606960602725,
+      "final_val_ppl": 18.571106530837838,
+      "param_distance_rel": 0.1222958697256603,
+      "compute": {
+        "fwd_count": 25,
+        "bwd_count": 25,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.5985,
+        "flops_est": 6289727946752.0,
+        "intrinsic_flops_est": 674863513600.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.921606960602725
+        }
+      ],
+      "notes": "Rank-16 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r64",
+      "kind": "practical",
+      "horizon": 25,
+      "alpha": 0.5623413251903491,
+      "final_train_loss": 2.9061917282464935,
+      "final_val_loss": 2.9095658141607745,
+      "final_val_ppl": 18.34883003506366,
+      "param_distance_rel": 0.12180708768678183,
+      "compute": {
+        "fwd_count": 25,
+        "bwd_count": 25,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.7872,
+        "flops_est": 890819837952.0,
+        "intrinsic_flops_est": 674863513600.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.9095658141607745
+        }
+      ],
+      "notes": "Rank-64 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r128",
+      "kind": "practical",
+      "horizon": 25,
+      "alpha": 0.5623413251903491,
+      "final_train_loss": 2.906108073362215,
+      "final_val_loss": 2.909484569861394,
+      "final_val_ppl": 18.347339357778345,
+      "param_distance_rel": 0.1217698396768253,
+      "compute": {
+        "fwd_count": 25,
+        "bwd_count": 25,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.811,
+        "flops_est": 890819837952.0,
+        "intrinsic_flops_est": 674863513600.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.909484569861394
+        }
+      ],
+      "notes": "Rank-128 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectGradient",
+      "kind": "practical",
+      "horizon": 50,
+      "alpha": 0.03162277660168379,
+      "final_train_loss": 3.1002859787678156,
+      "final_val_loss": 3.1009752956053678,
+      "final_val_ppl": 22.21961140657009,
+      "param_distance_rel": 0.12499247514950373,
+      "compute": {
+        "fwd_count": 1,
+        "bwd_count": 1,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.1425,
+        "flops_est": 5641858973696.0,
+        "intrinsic_flops_est": 26994540544.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.1009752956053678
+        }
+      ],
+      "notes": "Single scaled first-gradient update: W0 - alpha*gradL(W0); alpha tuned on val"
+    },
+    {
+      "name": "DirectAverageGradient",
+      "kind": "practical",
+      "horizon": 50,
+      "alpha": 1.0,
+      "final_train_loss": 3.027518221712488,
+      "final_val_loss": 3.0283964531591447,
+      "final_val_ppl": 20.664070203282122,
+      "param_distance_rel": 0.12093810720168612,
+      "compute": {
+        "fwd_count": 50,
+        "bwd_count": 50,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.8064,
+        "flops_est": 6964591460352.0,
+        "intrinsic_flops_est": 1349727027200.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.0283964531591447
+        }
+      ],
+      "notes": "Single update along mean of 50 roll-out gradients"
+    },
+    {
+      "name": "DirectMomentum",
+      "kind": "practical",
+      "horizon": 50,
+      "alpha": 0.03162277660168379,
+      "final_train_loss": 3.44019342595198,
+      "final_val_loss": 3.4413913111748884,
+      "final_val_ppl": 31.23037913075061,
+      "param_distance_rel": 0.12471772135831205,
+      "compute": {
+        "fwd_count": 50,
+        "bwd_count": 50,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 38.7323,
+        "flops_est": 6964591460352.0,
+        "intrinsic_flops_est": 1349727027200.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.4413913111748884
+        }
+      ],
+      "notes": "Momentum-styled cumulative EMA direction over 50 roll-out steps"
+    },
+    {
+      "name": "DirectLowRank_r16",
+      "kind": "practical",
+      "horizon": 50,
+      "alpha": 1.0,
+      "final_train_loss": 3.0332438570307936,
+      "final_val_loss": 3.034491116687312,
+      "final_val_ppl": 20.790395321812017,
+      "param_distance_rel": 0.12176619549922782,
+      "compute": {
+        "fwd_count": 50,
+        "bwd_count": 50,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.5824,
+        "flops_est": 6964591460352.0,
+        "intrinsic_flops_est": 1349727027200.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.034491116687312
+        }
+      ],
+      "notes": "Rank-16 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r64",
+      "kind": "practical",
+      "horizon": 50,
+      "alpha": 1.0,
+      "final_train_loss": 3.0273724278127117,
+      "final_val_loss": 3.028252475120598,
+      "final_val_ppl": 20.661095245155323,
+      "param_distance_rel": 0.1210110337527814,
+      "compute": {
+        "fwd_count": 50,
+        "bwd_count": 50,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.8502,
+        "flops_est": 1565683351552.0,
+        "intrinsic_flops_est": 1349727027200.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.028252475120598
+        }
+      ],
+      "notes": "Rank-64 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r128",
+      "kind": "practical",
+      "horizon": 50,
+      "alpha": 1.0,
+      "final_train_loss": 3.0275117449873075,
+      "final_val_loss": 3.02839000270503,
+      "final_val_ppl": 20.66393691107535,
+      "param_distance_rel": 0.12094160088227367,
+      "compute": {
+        "fwd_count": 50,
+        "bwd_count": 50,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.787,
+        "flops_est": 1565683351552.0,
+        "intrinsic_flops_est": 1349727027200.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.02839000270503
+        }
+      ],
+      "notes": "Rank-128 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectGradient",
+      "kind": "practical",
+      "horizon": 100,
+      "alpha": 0.03162277660168379,
+      "final_train_loss": 3.1002859787678156,
+      "final_val_loss": 3.1009752956053678,
+      "final_val_ppl": 22.21961140657009,
+      "param_distance_rel": 0.12499247514950373,
+      "compute": {
+        "fwd_count": 1,
+        "bwd_count": 1,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.0814,
+        "flops_est": 5641858973696.0,
+        "intrinsic_flops_est": 26994540544.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.1009752956053678
+        }
+      ],
+      "notes": "Single scaled first-gradient update: W0 - alpha*gradL(W0); alpha tuned on val"
+    },
+    {
+      "name": "DirectAverageGradient",
+      "kind": "practical",
+      "horizon": 100,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.841515961594469,
+      "final_val_loss": 2.843993885945174,
+      "final_val_ppl": 17.184260642336735,
+      "param_distance_rel": 0.11999112626630334,
+      "compute": {
+        "fwd_count": 100,
+        "bwd_count": 100,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.209,
+        "flops_est": 8314318487552.0,
+        "intrinsic_flops_est": 2699454054400.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.843993885945174
+        }
+      ],
+      "notes": "Single update along mean of 100 roll-out gradients"
+    },
+    {
+      "name": "DirectMomentum",
+      "kind": "practical",
+      "horizon": 100,
+      "alpha": 0.001,
+      "final_train_loss": 3.4582610411906805,
+      "final_val_loss": 3.4597013197547812,
+      "final_val_ppl": 31.807474831373355,
+      "param_distance_rel": 0.12554770161826426,
+      "compute": {
+        "fwd_count": 100,
+        "bwd_count": 100,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 36.7913,
+        "flops_est": 8314318487552.0,
+        "intrinsic_flops_est": 2699454054400.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 3.4597013197547812
+        }
+      ],
+      "notes": "Momentum-styled cumulative EMA direction over 100 roll-out steps"
+    },
+    {
+      "name": "DirectLowRank_r16",
+      "kind": "practical",
+      "horizon": 100,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.870386715010395,
+      "final_val_loss": 2.873166065397808,
+      "final_val_ppl": 17.692946642715462,
+      "param_distance_rel": 0.12121908511921685,
+      "compute": {
+        "fwd_count": 100,
+        "bwd_count": 100,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 25,
+        "total_evals": 26,
+        "wall_time_sec": 37.6357,
+        "flops_est": 8314318487552.0,
+        "intrinsic_flops_est": 2699454054400.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 5398908108800.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.873166065397808
+        }
+      ],
+      "notes": "Rank-16 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r64",
+      "kind": "practical",
+      "horizon": 100,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.842439919944823,
+      "final_val_loss": 2.8449216168766154,
+      "final_val_ppl": 17.20021040987095,
+      "param_distance_rel": 0.12010526749854535,
+      "compute": {
+        "fwd_count": 100,
+        "bwd_count": 100,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.9137,
+        "flops_est": 2915410378752.0,
+        "intrinsic_flops_est": 2699454054400.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.8449216168766154
+        }
+      ],
+      "notes": "Rank-64 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    },
+    {
+      "name": "DirectLowRank_r128",
+      "kind": "practical",
+      "horizon": 100,
+      "alpha": 1.7782794100389228,
+      "final_train_loss": 2.8415838132693074,
+      "final_val_loss": 2.8440603439882026,
+      "final_val_ppl": 17.18540271261938,
+      "param_distance_rel": 0.11999692040118547,
+      "compute": {
+        "fwd_count": 100,
+        "bwd_count": 100,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.9893,
+        "flops_est": 2915410378752.0,
+        "intrinsic_flops_est": 2699454054400.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "direct",
+          "val_loss": 2.8440603439882026
+        }
+      ],
+      "notes": "Rank-128 SVD truncation of mean roll-out gradient; alpha=avg-alpha"
+    }
+  ]
+}

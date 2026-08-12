@@ -1,0 +1,200 @@
+{
+  "config": {
+    "phase1_config": "configs/baseline.yaml",
+    "out_dir": "results/phase2",
+    "reference_trajectory_dir": "results/trajectory",
+    "horizons": [
+      5,
+      10,
+      25,
+      50,
+      100
+    ],
+    "use_horizon_100": true,
+    "alpha_grid": "logspace(-4, 2, 25)",
+    "ranks": [
+      4,
+      16,
+      64,
+      128,
+      256
+    ],
+    "momentum_beta": 0.9,
+    "threads": 4,
+    "eval_batch": 32,
+    "eval_max_windows": 1024,
+    "methods": [
+      "BaselineAdamW",
+      "DirectOracle",
+      "DirectGradient",
+      "DirectAverageGradient",
+      "DirectMomentum",
+      "DirectLowRank"
+    ],
+    "seed": 7
+  },
+  "seed": 7,
+  "oracle": [
+    {
+      "name": "DirectOracle",
+      "kind": "oracle",
+      "horizon": 5,
+      "alpha": 1.0,
+      "final_train_loss": 2.6266181938291533,
+      "final_val_loss": 2.6284427080852697,
+      "final_val_ppl": 13.852181206747874,
+      "param_distance_rel": 0.0,
+      "compute": {
+        "fwd_count": 0,
+        "bwd_count": 0,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.6796,
+        "flops_est": 215956324352.0,
+        "intrinsic_flops_est": 0.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "oracle W_N",
+          "val_loss": 2.6284427080852697
+        }
+      ],
+      "notes": "ORACLE ONLY - transports the future answer W_N to W0 in one update. Not a practical training algorithm; an upper bound."
+    },
+    {
+      "name": "DirectOracle",
+      "kind": "oracle",
+      "horizon": 10,
+      "alpha": 1.0,
+      "final_train_loss": 2.0847213193187564,
+      "final_val_loss": 2.0851460103405155,
+      "final_val_ppl": 8.045766160994816,
+      "param_distance_rel": 0.0,
+      "compute": {
+        "fwd_count": 0,
+        "bwd_count": 0,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.7358,
+        "flops_est": 215956324352.0,
+        "intrinsic_flops_est": 0.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "oracle W_N",
+          "val_loss": 2.0851460103405155
+        }
+      ],
+      "notes": "ORACLE ONLY - transports the future answer W_N to W0 in one update. Not a practical training algorithm; an upper bound."
+    },
+    {
+      "name": "DirectOracle",
+      "kind": "oracle",
+      "horizon": 25,
+      "alpha": 1.0,
+      "final_train_loss": 1.5149700200463843,
+      "final_val_loss": 1.5153671138384637,
+      "final_val_ppl": 4.551091588904418,
+      "param_distance_rel": 0.0,
+      "compute": {
+        "fwd_count": 0,
+        "bwd_count": 0,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.6782,
+        "flops_est": 215956324352.0,
+        "intrinsic_flops_est": 0.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "oracle W_N",
+          "val_loss": 1.5153671138384637
+        }
+      ],
+      "notes": "ORACLE ONLY - transports the future answer W_N to W0 in one update. Not a practical training algorithm; an upper bound."
+    },
+    {
+      "name": "DirectOracle",
+      "kind": "oracle",
+      "horizon": 50,
+      "alpha": 1.0,
+      "final_train_loss": 1.1695321441635371,
+      "final_val_loss": 1.1708950697478941,
+      "final_val_ppl": 3.22487783770181,
+      "param_distance_rel": 0.0,
+      "compute": {
+        "fwd_count": 0,
+        "bwd_count": 0,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.6839,
+        "flops_est": 215956324352.0,
+        "intrinsic_flops_est": 0.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "oracle W_N",
+          "val_loss": 1.1708950697478941
+        }
+      ],
+      "notes": "ORACLE ONLY - transports the future answer W_N to W0 in one update. Not a practical training algorithm; an upper bound."
+    },
+    {
+      "name": "DirectOracle",
+      "kind": "oracle",
+      "horizon": 100,
+      "alpha": 1.0,
+      "final_train_loss": 0.8372902551035243,
+      "final_val_loss": 0.8373222655972602,
+      "final_val_ppl": 2.3101726583090714,
+      "param_distance_rel": 0.0,
+      "compute": {
+        "fwd_count": 0,
+        "bwd_count": 0,
+        "optimizer_updates": 0,
+        "param_updates": 1,
+        "tuning_evals": 0,
+        "total_evals": 1,
+        "wall_time_sec": 2.7028,
+        "flops_est": 215956324352.0,
+        "intrinsic_flops_est": 0.0,
+        "eval_flops_est": 215956324352.0,
+        "tuning_flops_est": 0.0,
+        "tokens_seen": 0,
+        "peak_ram_mib": 0.0
+      },
+      "trajectory": [
+        {
+          "marker": "oracle W_N",
+          "val_loss": 0.8373222655972602
+        }
+      ],
+      "notes": "ORACLE ONLY - transports the future answer W_N to W0 in one update. Not a practical training algorithm; an upper bound."
+    }
+  ],
+  "note": "ORACLE experiments use the future answer W_N"
+}

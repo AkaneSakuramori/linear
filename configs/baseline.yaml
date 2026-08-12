@@ -1,0 +1,45 @@
+# Phase 1 baseline configuration — conventional AdamW training on CPU.
+
+# ---- experiment bookkeeping ----
+experiment_name: "baseline"
+
+# ---- architecture (tiny decoder-only Transformer) ----
+n_layer: 2
+d_model: 256
+n_head: 4
+context_length: 64
+ffn_mult: 4
+dropout: 0.0          # keep 0 for deterministic, noiseless baseline
+tie_embeddings: false
+vocab_size: null      # resolved from the tokenizer at runtime
+
+# ---- dataset (deterministic synthetic corpus) ----
+data_dir: "data"
+corpus_train_chars: 60000
+corpus_val_chars: 20000
+corpus_seed: 12345
+corpus_val_seed: 4242
+regenerate: false
+
+# ---- optimizer / training schedule ----
+lr: 0.0003
+weight_decay: 0.01
+betas: [0.9, 0.999]
+batch_size: 32
+grad_accumulation: 1
+grad_clip: 1.0
+n_steps: 100
+seed: 7
+threads: 4
+device: "cpu"
+lr_schedule: "constant"   # "constant" | "cosine"
+warmup_steps: 0
+eval_max_windows: 1024
+log_every: 5
+trajectory_steps: [0, 1, 2, 5, 10, 25, 50, 75, 100]
+
+# ---- checkpoints / results ----
+out_dir: "results"
+checkpoints_dir: "checkpoints"
+save_trajectory: true
+resume: false
