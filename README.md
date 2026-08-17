@@ -7,7 +7,7 @@
 ![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PyTorch CPU](https://img.shields.io/badge/pytorch-2.x%20CPU-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![No GPU required](https://img.shields.io/badge/GPU-none_required-6B46C1?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-55%20passing-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-68%20passing-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge)
 
 **Research status: hypothesis under investigation — nothing here is claimed to work yet.**
@@ -67,7 +67,8 @@ in 20 minutes is *not* an improvement over 100 updates in 10 minutes.
 | 💾 **`src/checkpoint.py`** | Trajectory snapshots (`W0…W100`) + resumable optimizer state |
 | 🔬 **`src/phase2/`** | Direct-Update research: baseline audit, oracle, structure analysis, method benchmark |
 | 🧠 **`src/phase3/`** | Learned Direct Update Predictor: meta-training, structured parameterisation, ablations, compute accounting |
-| ✅ **`tests/`** | 55 tests covering model, data, training, checkpoints, Phase-2/3 research code |
+| ⚙️ **`src/phase4/`** | Generated low-rank directions: update operator, per-layer SVD oracle, behavioural objective, ablations |
+| ✅ **`tests/`** | 68 tests covering model, data, training, checkpoints, Phase-2/3/4 research code |
 
 ### 📁 Project layout
 
@@ -78,11 +79,13 @@ direct-learning/
 │   ├── model.py · tokenizer.py · dataset.py · train.py
 │   ├── evaluate.py · checkpoint.py · utils.py
 │   ├── phase2/                # oracle · analysis · methods · plots · reports
-│   └── phase3/                # trajectory · features · predictor · eval · plots · report
-├── tests/                     # 55 pytest cases
-├── results/                   # config.json · metrics.json · training.log · trajectory/
+│   ├── phase3/                # trajectory · features · predictor · eval · plots · report
+│   └── phase4/                # operator · oracle · functional · eval · plots · report
+├── tests/                     # 68 pytest cases
+├── results/
 │   ├── phase2/                # baseline_audit.md · phase2_summary.md · plots/ · *.json
-│   └── phase3/                # configs · metrics · predictions · plots · ablations · phase3_report.md
+│   ├── phase3/                # configs · metrics · predictions · plots · ablations · phase3_report.md
+│   └── phase4/                # configs · oracle · metrics · plots · ablations · phase4_report.md
 ├── data/                      # generated corpus (deterministic, tiny)
 └── README.md · requirements.txt · pytest.ini · LICENSE
 ```
@@ -100,7 +103,7 @@ python3 -m venv .venv
 # CPU-only PyTorch (recommended for this machine):
 .venv/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch
 
-# Run the tests (all 55 should pass)
+# Run the tests (all 68 should pass)
 .venv/bin/pytest
 
 # Run the Phase-1 baseline (100 AdamW steps, ~1 min)
@@ -111,6 +114,9 @@ python3 -m venv .venv
 
 # Run the Phase-3 Learned Direct Update Predictor (meta-train + direct eval + ablations)
 .venv/bin/python -m src.phase3.run --phase1-config configs/baseline.yaml
+
+# Run the Phase-4 Generated Parameter Directions (oracle + operator + ablations)
+.venv/bin/python -m src.phase4.run --phase1-config configs/baseline.yaml
 ```
 
 🖥️ **Hardware-conscious by design** — this runs happily on a shared CPU-only VPS:
@@ -223,11 +229,51 @@ plots in `results/phase3/plots/`, raw data in `results/phase3/metrics|prediction
 
 ---
 
+## ⚙️ What Phase 4 investigates
+
+Phase 4 tests the recommendation Phase 3 ended with: can a **learned operator
+GENERATE new parameter directions** — as per-layer low-rank factors
+`ΔW_l = U_l V_l^T` — rather than scaling observed gradients?
+
+1. **Oracle first** — per-layer SVD of `ΔW_target = W_H − W_K`: does the low-rank
+   family even represent a useful update? (The decisive question.)
+2. **Learned operator** — a shared MLP + per-layer identity embedding maps
+   steps-1..K features to `U_l, V_l` (zero-initialized, reconstruction objective
+   `‖U_l V_l^T − ΔW_target_l‖²/‖ΔW_target_l‖²`, invariant to factorization ambiguity).
+3. **Grid** — K ∈ {10, 15, 25}, H ∈ {25, 50} (+ a K=25/H=25 zero-target control);
+   ranks 1/2/4/8 (oracle), 1/2/4 (learned); 6 train / 2 val / 5 held-out test trajectories.
+4. **Ablations** — feature sets (loss / grad / grad+loss / full), behavioural
+   (validation-loss) objective pilot.
+5. **Full compute accounting** — observation, operator inference, U V^T generation,
+   parameter update, meta-training, and amortized totals.
+
+### 📌 Headline findings
+
+- 🎯 **The low-rank family is informative but insufficient at r ≤ 8.** The *oracle*
+  (best rank-r of ΔW via SVD) captures ~12% energy at r=1 and ~57% at r=8, improving
+  val loss monotonically (K=10,H=25: 2.05 → **1.64**) but **not reaching** conventional
+  (1.52); Phase-2's effective rank of the true update is ~180–230.
+- ❌ **The learned operator overfits and does not generalize.** Reconstruction MSE
+  falls to 0.44 on the 6 meta-train trajectories but the held-out prediction error is
+  ~1.0 (≈ predicting zero): on unseen seeds it emits a near-zero update and its quality
+  ≈ no-update. Classic overfitting on ~150 (trajectory × layer) examples.
+- 🧭 **The bottleneck is learning/generalization, not the family and not compute** —
+  opposite of Phase 3. Direct application FLOPs are far below conventional.
+- 📋 **Recommendation: MODIFY** — more meta-training data, a more sample-efficient
+  structured generation (compressed-basis / hypernetwork), and meta-objectives that
+  optimize held-out quality; plus accepting much larger effective rank for full quality.
+
+Full details: [`results/phase4/phase4_report.md`](results/phase4/phase4_report.md) ·
+plots in `results/phase4/plots/`, raw data in `results/phase4/metrics|oracle|ablations`.
+
+---
+
 ## 🧩 Project roadmap
 
 - [x] **Phase 1** — CPU baseline + full trajectory `W0…W100`
 - [x] **Phase 2** — audit, oracle, structure analysis, direct-method benchmark
 - [x] **Phase 3** — meta-learned direct update predictor, parameterisation ablations, compute analysis, reproducible negative result
+- [x] **Phase 4** — generated low-rank directions: oracle, learned update operator, generalization-failure analysis, MODIFY recommendation
 - [ ] *Later* — learned optimizers, model editing, LoRA, GPU scaling (explicitly out of scope for now)
 
 ---

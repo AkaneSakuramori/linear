@@ -16,6 +16,7 @@ env/
 checkpoints/
 results/trajectory/
 results/phase3/checkpoints/
+results/phase4/checkpoints/
 
 # --- OS noise ---
 .DS_Store

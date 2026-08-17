@@ -1,0 +1,22 @@
+{
+  "meta_test_seeds": [
+    30,
+    31,
+    32,
+    33
+  ],
+  "meta_train_seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "meta_val_seeds": [
+    20,
+    21
+  ],
+  "note": "shared deterministic corpus; trajectories differ by init + batch sampling",
+  "reference_seed": 7
+}

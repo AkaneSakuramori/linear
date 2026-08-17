@@ -1,0 +1,95 @@
+{
+  "ablation_feature_sets": [
+    "loss",
+    "grad",
+    "grad_loss",
+    "full"
+  ],
+  "ablation_pairs": [
+    [
+      10,
+      25
+    ]
+  ],
+  "ablation_ranks": [
+    1,
+    2,
+    4
+  ],
+  "batch_size": 0,
+  "behavior_steps": 150,
+  "behavior_weight": 0.0,
+  "behavior_windows": 64,
+  "default_rank": 4,
+  "eval_max_windows": 1024,
+  "feature_set": "full",
+  "hidden": 128,
+  "k_max": 25,
+  "layer_emb_dim": 16,
+  "learned_ranks": [
+    1,
+    2,
+    4
+  ],
+  "lr": 0.001,
+  "max_steps": 100,
+  "meta_test_seeds": [
+    30,
+    31,
+    32,
+    33
+  ],
+  "meta_train_seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "meta_val_seeds": [
+    20,
+    21
+  ],
+  "operator_seed": 2345,
+  "oracle_ranks": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "out_dir": "results/phase4",
+  "pairs": [
+    [
+      10,
+      25
+    ],
+    [
+      15,
+      25
+    ],
+    [
+      25,
+      25
+    ],
+    [
+      10,
+      50
+    ],
+    [
+      25,
+      50
+    ]
+  ],
+  "phase1_config": "configs/baseline.yaml",
+  "record_steps": [
+    10,
+    15,
+    25,
+    50,
+    100
+  ],
+  "reference_seed": 7,
+  "threads": 4,
+  "train_steps": 800
+}
