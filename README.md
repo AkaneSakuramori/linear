@@ -9,10 +9,36 @@
 ![No GPU required](https://img.shields.io/badge/GPU-none_required-6B46C1?style=for-the-badge)
 ![Tests](https://img.shields.io/badge/tests-81%20passing-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-CONCLUDED%20%E2%80%93%20APPROACH%20ABANDONED-critical?style=for-the-badge)
 
-**Research status: hypothesis under investigation — nothing here is claimed to work yet.**
+**⚠️ PROJECT STOPPED — RESEARCH CONCLUDED**
 
 </div>
+
+---
+
+## 🛑 Project status: CONCLUDED — APPROACH ABANDONED
+
+This project has been **stopped**. It is an archived R&D investigation, preserved
+for reference only; it is **no longer being developed**.
+
+The Direct Learning methodology investigated here — a learned (direct) update
+operator that attempts to replace iterative gradient-based optimization — **did
+not demonstrate sufficient generalization** to replace conventional training. In
+every phase and on every held-out test, the learned operators stayed at the
+no-update baseline, recovering only ~1–4% of the improvement that the (future
+aware) oracle shows is available.
+
+**This conclusion applies only to the methodology investigated in this
+repository.** It is **not** a claim that alternative approaches to
+neural-network training are impossible in general.
+
+- See [`results/FINAL_REPORT.md`](results/FINAL_REPORT.md) for the complete
+  Phases 1–5 summary, quantitative results, failures, and the final conclusion.
+- All phase source code, tests, configurations, checkpoints, and experimental
+  results remain preserved and are not modified.
+- No further phases will be implemented.
+
 
 ---
 
@@ -324,6 +350,7 @@ plots in `results/phase5/plots/`, raw data in
 - [x] **Phase 3** — meta-learned direct update predictor, parameterisation ablations, compute analysis, reproducible negative result
 - [x] **Phase 4** — generated low-rank directions: oracle, learned update operator, generalization-failure analysis, MODIFY recommendation
 - [x] **Phase 5** — generalizable update operator: structured generator, objectives A/B/C, generalization tests A–D, second corpus; STOP recommendation
+- [x] **Project archived** — `results/FINAL_REPORT.md`; approach **CONCLUDED — APPROACH ABANDONED**
 - [ ] *Later* — learned optimizers, model editing, LoRA, GPU scaling (explicitly out of scope for now)
 
 ---
