@@ -1,0 +1,104 @@
+{
+  "10_25": [
+    {
+      "H": 25,
+      "K": 10,
+      "mean_explained_energy": 0.11888344795901173,
+      "mean_rel_param_dist": 0.042626016010275075,
+      "mean_val_loss": 1.9307438450408039,
+      "rank": 1
+    },
+    {
+      "H": 25,
+      "K": 10,
+      "mean_explained_energy": 0.2109549369446012,
+      "mean_rel_param_dist": 0.040336779186939425,
+      "mean_val_loss": 1.8721422197214805,
+      "rank": 2
+    },
+    {
+      "H": 25,
+      "K": 10,
+      "mean_explained_energy": 0.35832426556087377,
+      "mean_rel_param_dist": 0.036373079391171376,
+      "mean_val_loss": 1.760722368852651,
+      "rank": 4
+    },
+    {
+      "H": 25,
+      "K": 10,
+      "mean_explained_energy": 0.5641114033004873,
+      "mean_rel_param_dist": 0.029977484217407462,
+      "mean_val_loss": 1.6271291498780238,
+      "rank": 8
+    }
+  ],
+  "15_25": [
+    {
+      "H": 25,
+      "K": 15,
+      "mean_explained_energy": 0.12299320471027267,
+      "mean_rel_param_dist": 0.027402915279261406,
+      "mean_val_loss": 1.7123248196227434,
+      "rank": 1
+    },
+    {
+      "H": 25,
+      "K": 15,
+      "mean_explained_energy": 0.21582622208752097,
+      "mean_rel_param_dist": 0.02591159985208622,
+      "mean_val_loss": 1.681289576134341,
+      "rank": 2
+    },
+    {
+      "H": 25,
+      "K": 15,
+      "mean_explained_energy": 0.35970927446943346,
+      "mean_rel_param_dist": 0.023414106572294514,
+      "mean_val_loss": 1.6270119846830342,
+      "rank": 4
+    },
+    {
+      "H": 25,
+      "K": 15,
+      "mean_explained_energy": 0.5584422854638472,
+      "mean_rel_param_dist": 0.019441979726525765,
+      "mean_val_loss": 1.5696669255532667,
+      "rank": 8
+    }
+  ],
+  "25_50": [
+    {
+      "H": 50,
+      "K": 25,
+      "mean_explained_energy": 0.135254717944312,
+      "mean_rel_param_dist": 0.03937546303592824,
+      "mean_val_loss": 1.4742606690691742,
+      "rank": 1
+    },
+    {
+      "H": 50,
+      "K": 25,
+      "mean_explained_energy": 0.2388483067620444,
+      "mean_rel_param_dist": 0.036938756079366024,
+      "mean_val_loss": 1.4408700375417185,
+      "rank": 2
+    },
+    {
+      "H": 50,
+      "K": 25,
+      "mean_explained_energy": 0.38953542414063963,
+      "mean_rel_param_dist": 0.03307660149559613,
+      "mean_val_loss": 1.3845966268008227,
+      "rank": 4
+    },
+    {
+      "H": 50,
+      "K": 25,
+      "mean_explained_energy": 0.5655224122328815,
+      "mean_rel_param_dist": 0.027905708496726047,
+      "mean_val_loss": 1.296962063115642,
+      "rank": 8
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "A_ref_seed": {
+    "conventional": 1.5153671138384637,
+    "mean_cos_gradmean_target": -0.3845269304327602,
+    "mean_cos_pred_target": 0.02963340505135717,
+    "mean_rel_delta_error": 0.9996966732823966,
+    "mean_update_norm": 0.09533188492059708,
+    "mean_val_loss": 2.081783784906508,
+    "mean_val_ppl": 8.018759907369796,
+    "n": 1,
+    "no_update": 2.0851460103405155,
+    "oracle_r4": 1.7764136660900136,
+    "pct_oracle_recovered": 1.0890421741103606
+  },
+  "A_unseen_seed": {
+    "conventional": 1.5042301427457134,
+    "mean_cos_gradmean_target": -0.40496163415454944,
+    "mean_cos_pred_target": 0.03109091349431408,
+    "mean_rel_delta_error": 0.9997276868158065,
+    "mean_update_norm": 0.10260864347219467,
+    "mean_val_loss": 2.0144286830213627,
+    "mean_val_ppl": 7.501682911898326,
+    "n": 8,
+    "no_update": 2.018173317612712,
+    "oracle_r4": 1.7587609566979805,
+    "pct_oracle_recovered": 1.4435066155464706
+  },
+  "B_unseen_batch_order": {
+    "conventional": 1.5152775096438953,
+    "mean_cos_gradmean_target": -0.4037993123638759,
+    "mean_cos_pred_target": 0.044683785847806606,
+    "mean_rel_delta_error": 0.9990169355356433,
+    "mean_update_norm": 0.10003259405493736,
+    "mean_val_loss": 2.0110040620313128,
+    "mean_val_ppl": 7.471337679813841,
+    "n": 2,
+    "no_update": 2.021463409111038,
+    "oracle_r4": 1.7670071183020994,
+    "pct_oracle_recovered": 4.110469050096669
+  },
+  "C_unseen_init": {
+    "conventional": 1.5301985378370602,
+    "mean_cos_gradmean_target": -0.39214817996989126,
+    "mean_cos_pred_target": 0.030406902824421364,
+    "mean_rel_delta_error": 0.9999331297484095,
+    "mean_update_norm": 0.1165892668068409,
+    "mean_val_loss": 2.086830529788791,
+    "mean_val_ppl": 8.060145201857415,
+    "n": 2,
+    "no_update": 2.0923535033477583,
+    "oracle_r4": 1.7873704958942493,
+    "pct_oracle_recovered": 1.8109118947583203
+  },
+  "D_unseen_corpus": {
+    "conventional": 1.5201156720429119,
+    "mean_cos_gradmean_target": -0.3569505574443885,
+    "mean_cos_pred_target": 0.018004119418293624,
+    "mean_rel_delta_error": 1.0036708952141797,
+    "mean_update_norm": 0.17809844762086868,
+    "mean_val_loss": 1.8497227186288392,
+    "mean_val_ppl": 6.358240384512424,
+    "n": 4,
+    "no_update": 1.8517466566452319,
+    "oracle_r4": 1.6016051506012738,
+    "pct_oracle_recovered": 0.8091172266457034
+  }
+}

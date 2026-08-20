@@ -1,0 +1,82 @@
+{
+  "ref": {
+    "conventional": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 1.5153671138384637,
+      "mean_val_ppl": 4.551091588904418,
+      "n": 1
+    },
+    "no_update": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 2.0851460103405155,
+      "mean_val_ppl": 8.045766160994816,
+      "n": 1
+    }
+  },
+  "test": {
+    "conventional": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 1.5042301427457134,
+      "mean_val_ppl": 4.500964385144786,
+      "n": 8
+    },
+    "no_update": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 2.018173317612712,
+      "mean_val_ppl": 7.529780998503515,
+      "n": 8
+    }
+  },
+  "train": {
+    "conventional": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 1.5135422006040185,
+      "mean_val_ppl": 4.54316869731966,
+      "n": 32
+    },
+    "no_update": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 2.0363591750943613,
+      "mean_val_ppl": 7.668328121955517,
+      "n": 32
+    }
+  },
+  "val": {
+    "conventional": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 1.5188677705069602,
+      "mean_val_ppl": 4.567531254059404,
+      "n": 8
+    },
+    "no_update": {
+      "mean_cos_gradmean_target": null,
+      "mean_cos_pred_target": null,
+      "mean_rel_delta_error": null,
+      "mean_update_norm": null,
+      "mean_val_loss": 2.0419580339638137,
+      "mean_val_ppl": 7.711607595357634,
+      "n": 8
+    }
+  }
+}

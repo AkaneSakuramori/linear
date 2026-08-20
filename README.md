@@ -7,7 +7,7 @@
 ![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PyTorch CPU](https://img.shields.io/badge/pytorch-2.x%20CPU-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
 ![No GPU required](https://img.shields.io/badge/GPU-none_required-6B46C1?style=for-the-badge)
-![Tests](https://img.shields.io/badge/tests-68%20passing-brightgreen?style=for-the-badge)
+![Tests](https://img.shields.io/badge/tests-81%20passing-brightgreen?style=for-the-badge)
 ![License](https://img.shields.io/badge/license-MIT-yellowgreen?style=for-the-badge)
 
 **Research status: hypothesis under investigation — nothing here is claimed to work yet.**
@@ -68,7 +68,8 @@ in 20 minutes is *not* an improvement over 100 updates in 10 minutes.
 | 🔬 **`src/phase2/`** | Direct-Update research: baseline audit, oracle, structure analysis, method benchmark |
 | 🧠 **`src/phase3/`** | Learned Direct Update Predictor: meta-training, structured parameterisation, ablations, compute accounting |
 | ⚙️ **`src/phase4/`** | Generated low-rank directions: update operator, per-layer SVD oracle, behavioural objective, ablations |
-| ✅ **`tests/`** | 68 tests covering model, data, training, checkpoints, Phase-2/3/4 research code |
+| 🔭 **`src/phase5/`** | Generalizable update operator: structured generator, objectives A/B/C, generalization tests A–D, second corpus |
+| ✅ **`tests/`** | 81 tests covering model, data, training, checkpoints, Phase-2/3/4/5 research code |
 
 ### 📁 Project layout
 
@@ -80,12 +81,14 @@ direct-learning/
 │   ├── evaluate.py · checkpoint.py · utils.py
 │   ├── phase2/                # oracle · analysis · methods · plots · reports
 │   ├── phase3/                # trajectory · features · predictor · eval · plots · report
-│   └── phase4/                # operator · oracle · functional · eval · plots · report
-├── tests/                     # 68 pytest cases
+│   ├── phase4/                # operator · oracle · functional · eval · plots · report
+│   └── phase5/                # generator · corpus2 · trajectory · eval · plots · report
+├── tests/                     # 81 pytest cases
 ├── results/
 │   ├── phase2/                # baseline_audit.md · phase2_summary.md · plots/ · *.json
 │   ├── phase3/                # configs · metrics · predictions · plots · ablations · phase3_report.md
-│   └── phase4/                # configs · oracle · metrics · plots · ablations · phase4_report.md
+│   ├── phase4/                # configs · oracle · metrics · plots · ablations · phase4_report.md
+│   └── phase5/                # configs · generalization · ablations · metrics · plots · phase5_report.md
 ├── data/                      # generated corpus (deterministic, tiny)
 └── README.md · requirements.txt · pytest.ini · LICENSE
 ```
@@ -103,7 +106,7 @@ python3 -m venv .venv
 # CPU-only PyTorch (recommended for this machine):
 .venv/bin/pip install --index-url https://download.pytorch.org/whl/cpu torch
 
-# Run the tests (all 68 should pass)
+# Run the tests (all 81 should pass)
 .venv/bin/pytest
 
 # Run the Phase-1 baseline (100 AdamW steps, ~1 min)
@@ -117,6 +120,9 @@ python3 -m venv .venv
 
 # Run the Phase-4 Generated Parameter Directions (oracle + operator + ablations)
 .venv/bin/python -m src.phase4.run --phase1-config configs/baseline.yaml
+
+# Run the Phase-5 Generalizable Update Operator (objectives + generalization tests)
+.venv/bin/python -m src.phase5.run --phase1-config configs/baseline.yaml
 ```
 
 🖥️ **Hardware-conscious by design** — this runs happily on a shared CPU-only VPS:
@@ -268,12 +274,56 @@ plots in `results/phase4/plots/`, raw data in `results/phase4/metrics|oracle|abl
 
 ---
 
+## 🔭 What Phase 5 investigates
+
+Phase 5 asks one question: **can a learned update operator generalize** its
+parameter-transformation strategy to unseen trajectories? Phase 4's operator
+overfit its 6 meta-training trajectories; Phase 5 scales the data (6→16→32),
+uses a structured **compressed-basis generator** (shared encoder → latent `z_l`
+→ small coefficients applied onto learned per-layer bases), compares objectives
+(A parameter-reconstruction / B behavioural / C combined), and tests four
+generalization settings (A unseen seed, B unseen batch ordering, C unseen
+initialization, D unseen corpus).
+
+1. **Meta-training data** — 32 train / 8 val / 8 test trajectories (unseen seeds)
+   plus a second corpus B (different word distribution, same charset/vocab).
+2. **Oracle** — best rank-r of the true update (family ceiling).
+3. **Generalization metrics** — % of oracle improvement recovered,
+   cos(ΔW_pred, ΔW_target) vs cos(observed-gradient, ΔW_target), per test.
+4. **Fairness + compute accounting** — observation / generator inference /
+   U V^T / update / meta-training / amortized totals.
+
+### 📌 Headline findings
+
+- ❌ **Definitive negative result: the learned operator does NOT generalize.** Across
+  all data sizes (6/16/32), objectives (A/B/C with λ 0.01–1.0), architectures
+  (compressed vs flat), ranks (4/8), horizons, and generalization tests A–D, the
+  learned update stays at the **no-update baseline**, recovering only **~1–4% of the
+  oracle improvement**; cos(ΔW_pred, ΔW_target) ≈ 0.03 (essentially orthogonal).
+- 🎯 More data did **not** help; the behavioural objective did **not** help; the
+  structured generator did **not** help — the bottleneck is that early-training
+  statistics do not determine the future low-rank factors the generator must emit.
+- 🧭 The **oracle** still shows the low-rank family is *informative* (rank-8 captures
+  ~56% energy and gets close to conventional on short horizons), so the failure is
+  the **learned prediction**, not the family.
+- 📋 **Recommendation: STOP THIS APPROACH** for the learned-update-operator
+  methodology as tested; reconsider the broader hypothesis (the update is a
+  high-rank, step-dependent accumulation that small early-statistics-driven
+  generators cannot reproduce).
+
+Full details: [`results/phase5/phase5_report.md`](results/phase5/phase5_report.md) ·
+plots in `results/phase5/plots/`, raw data in
+`results/phase5/metrics|ablations|generalization|oracle`.
+
+---
+
 ## 🧩 Project roadmap
 
 - [x] **Phase 1** — CPU baseline + full trajectory `W0…W100`
 - [x] **Phase 2** — audit, oracle, structure analysis, direct-method benchmark
 - [x] **Phase 3** — meta-learned direct update predictor, parameterisation ablations, compute analysis, reproducible negative result
 - [x] **Phase 4** — generated low-rank directions: oracle, learned update operator, generalization-failure analysis, MODIFY recommendation
+- [x] **Phase 5** — generalizable update operator: structured generator, objectives A/B/C, generalization tests A–D, second corpus; STOP recommendation
 - [ ] *Later* — learned optimizers, model editing, LoRA, GPU scaling (explicitly out of scope for now)
 
 ---

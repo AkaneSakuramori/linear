@@ -1,0 +1,40 @@
+{
+  "amortization": {
+    "1": {
+      "conventional_total": 674863513600.0,
+      "direct_total": 43461229107200.0
+    },
+    "10": {
+      "conventional_total": 6748635136000.0,
+      "direct_total": 45890907238400.0
+    },
+    "100": {
+      "conventional_total": 67486351360000.0,
+      "direct_total": 70187688550400.0
+    },
+    "1000": {
+      "conventional_total": 674863513600000.0,
+      "direct_total": 313155501670400.0
+    }
+  },
+  "application": {
+    "components": {
+      "conventional_total_flops": 674863513600.0,
+      "direct_total_flops": 269964236800.0,
+      "flops_per_step": 26994540544.0,
+      "generator_inference_flops": 2764800.0,
+      "observation_flops": 269945405440.0,
+      "observation_fwd_bwd": 10,
+      "param_update_flops": 3221504.0,
+      "steps_saved_vs_conventional": 15,
+      "uv_generation_flops": 12845056.0
+    },
+    "conventional_total_flops": 674863513600.0,
+    "direct_total_flops": 269964236800.0
+  },
+  "meta_training": {
+    "generator_train_flops": 0.0,
+    "total_meta_flops": 43191264870400.0,
+    "trajectory_gen_flops": 43191264870400.0
+  }
+}
